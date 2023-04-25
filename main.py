@@ -5,6 +5,7 @@ import deepl
 import dc_secrets as dcs # This is so I don't have to delete the token before I commit anything.
 
 #TODO: use langcodes for plaintext language to code conversion (eg "english" -> "en")
+#TODO: add translations for some pre-defined messages, like the slash command mention on line 40
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -21,8 +22,6 @@ translator = deepl.Translator(dcs.deepl_auth) # dcs.deepl_auth is you DeepL API 
 #TODO: Use translator.get_languages() to get a list of languages instead of hardcoding them
 val_langs = ["BG", "CS", "DA", "DE", "EL", "EN-US", "ES", "ET", "FI", "FR", "HU", "ID", "IT", "JA", "KO", "LT", "LV", "NB", "NL", "PL", "PT-BR", "PT-PT", "RO", "RU", "SL", "SV", "TR", "UK", "ZH"]
 
-
-
 @client.event
 async def on_ready():
     print(f'We have logged in as {client.user}')
@@ -38,6 +37,7 @@ async def on_message(message):
         return
 
     if message.content.startswith('!trans'): #keeping this for backwards compat, might be phased out in the future
+        await message.channel.send("Please use /translate for better compatibiliy")
         req = message.content.split(" ", 2)
         lang = req[1].upper()
         text = req[2]
