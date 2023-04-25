@@ -3,6 +3,8 @@ from discord import app_commands
 from discord.ext import commands
 import deepl
 import dc_secrets as dcs # This is so I don't have to delete the token before I commit anything.
+from translations import Translations as t
+
 
 #TODO: use langcodes for plaintext language to code conversion (eg "english" -> "en")
 #TODO: add translations for some pre-defined messages, like the slash command mention on line 40
@@ -37,10 +39,10 @@ async def on_message(message):
         return
 
     if message.content.startswith('!trans'): #keeping this for backwards compat, might be phased out in the future
-        await message.channel.send("Please use /translate for better compatibiliy")
         req = message.content.split(" ", 2)
         lang = req[1].upper()
         text = req[2]
+        await message.channel.send(t.translate(lang=lang, key="translation.warning"))
         #i hate the rest of this but it was 1 am when i coded this, it will be refactored later omg
         if lang == "EN":
             lang = "EN-US"
@@ -72,14 +74,14 @@ async def on_message(message):
 @app_commands.describe(language="Language to translate to (default is english)")
 async def Translator(interaction: discord.Interaction, message: str = None, language: str = None):
     await interaction.response.defer() # fix 404 no webhook bc apperently it takes over 3 seconds to respond (it doesn't it only takes like 500 ms)
-    if message == None:
-        await interaction.followup.send(content="Please provide a message")
-        return
-    if language == "EN":
-        language == "EN-US"
     if language == None:
         language = "EN-US"
     language = language.upper()
+    if message == None:
+        await interaction.followup.send(content=t.translate(lang=language.upper(), key="message.warning"))
+        return
+    if language == "EN":
+        language == "EN-US"
     try: # This is mostly to fix limit/bad language errors, so we just show it to the user i'll figure out a way to make it better later
         result = translator.translate_text(message, target_lang=language)
     except deepl.exceptions.DeepLException as e:
