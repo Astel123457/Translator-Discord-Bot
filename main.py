@@ -4,9 +4,10 @@ from discord.ext import commands
 import deepl
 import dc_secrets as dcs # This is so I don't have to delete the token before I commit anything.
 from translations import Translations as t
-
+import sys
 
 #TODO: use langcodes for plaintext language to code conversion (eg "english" -> "en")
+#TODO: add translations for some pre-defined messages, like the slash command mention on line 40
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -87,5 +88,19 @@ async def Translator(interaction: discord.Interaction, message: str = None, lang
         interaction.followup.send(content=e)
     await interaction.followup.send(content=result)
     return
-        
-client.run(dcs.bot_token)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 1:
+        if sys.argv[1] == "--no-bot":
+            lang = sys.argv[2]
+            print("Lang: " + lang)
+            message = sys.argv[3:]
+            text = ""
+            for i in message:
+                text = text + i + " "
+            print("Message: " + text)
+            result = translator.translate_text(text, target_lang=lang)
+            print(result)
+    else:
+        client.run(dcs.bot_token)
