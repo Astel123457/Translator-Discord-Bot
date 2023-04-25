@@ -7,7 +7,6 @@ from translations import Translations as t
 
 
 #TODO: use langcodes for plaintext language to code conversion (eg "english" -> "en")
-#TODO: add translations for some pre-defined messages, like the slash command mention on line 40
 
 intents = discord.Intents.default()
 intents.message_content = True
