@@ -3,7 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 import deepl
 import dc_secrets as dcs # This is so I don't have to delete the token before I commit anything.
-from translations import Translations as t
+import translations as t 
 import sys
 
 #TODO: use langcodes for plaintext language to code conversion (eg "english" -> "en")
