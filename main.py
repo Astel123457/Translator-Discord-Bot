@@ -72,13 +72,13 @@ async def on_message(message):
 @tree.command(name="translate", description="Translate some text")
 @app_commands.describe(message="Message to translate")
 @app_commands.describe(language="Language to translate to (default is english)")
-async def Translator(interaction: discord.Interaction, message: str = None, language: str = None):
+async def Translator(interaction: discord.Interaction, message: str, language: str = None):
     await interaction.response.defer() # fix 404 no webhook bc apperently it takes over 3 seconds to respond (it doesn't it only takes like 500 ms)
     if language == None:
         language = "EN-US"
     language = language.upper()
     if message == None:
-        await interaction.followup.send(content=t.translate(lang=language.upper(), key="message.warning"))
+        await interaction.followup.send(content=t.translate(lang=language.upper(), key="message.somethingwrong"))
         return
     if language == "EN":
         language == "EN-US"
