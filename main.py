@@ -89,6 +89,20 @@ async def Translator(interaction: discord.Interaction, message: str, language: s
     await interaction.followup.send(content=result)
     return
 
+@tree.command(name="help", description="Display a help message in your langauage")
+@app_commands.describe(help="Which help message to display.")
+@app_commands.describe(language="Displays the help message in this language (Default is \"English (United States)\")")
+async def Help(interaction: discord.Interaction, help: str = "languages", language: str = "en-us"):
+    await interaction.response.defer()
+    if help == "language":
+        langs = "Here is a list of languages that I currently support: \n"
+        for i in val_langs:
+            if i == "EN-US":
+                langs = langs + "EN-US/EN\n"
+            else:
+                langs = langs + i + "\n"
+        await interaction.followup.send(content=langs)
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 1:
