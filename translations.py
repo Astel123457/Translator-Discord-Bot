@@ -1,7 +1,8 @@
 #TODO: add more languages
 en = {
     "translation.warning" : "Please use /translate for better compatibiliy.",
-    "message.warning" : "Please provide a message."
+    "message.warning" : "Please provide a message.",
+    "message.somethingwrong" : "Sorry, something went wrong. Please try again."
 }
     
 
