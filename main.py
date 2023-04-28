@@ -7,7 +7,7 @@ import translations as t
 import sys
 import langcodes
 
-#TODO: further langcodes development, so you only have to type the langauge (in any language) instead of a code, when wanted
+#TODO: use langcodes for plaintext language to code conversion (eg "english" -> "en")
 #TODO: add translations for some pre-defined messages, like the slash command mention on line 40
 
 intents = discord.Intents.default()
@@ -102,7 +102,7 @@ async def Help(interaction: discord.Interaction, help: str = "languages", langua
     await interaction.response.defer()
     if help == "languages":
         result = translator.get_target_languages()
-        langs = "Here is a list of languages that I currently support: \n"
+        langs = t.use_translate("help.supported", language) + "\n"
         for lang in result:
             res_lang = langcodes.get(lang.code)
             get = res_lang.describe(language.lower())
