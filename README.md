@@ -17,7 +17,7 @@ git clone https://github.com/Astel123457/Translator-Discord-Bot
 
 2. Install the required packages with pip.
 
-```
+```cls
 python -m pip install -r requirements.txt
 ```
 
@@ -57,7 +57,7 @@ Displays a help message for various topics. If a language code is specified, the
 
 ### Example
 
-```cls
+```
 /help help:languages language:EN
 
 Here is a list of languages that I currently support:
