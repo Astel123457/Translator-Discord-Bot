@@ -57,7 +57,7 @@ Displays a help message for various topics. If a language code is specified, the
 
 ### Example
 
-```cls
+```
 /help help:languages language:EN
 
 Here is a list of languages that I currently support:
