@@ -15,9 +15,7 @@ intents.message_content = True
 
 activity = discord.Activity(name='and Translating...', type=discord.ActivityType.watching)
 
-client = discord.Client(intents=intents, activity=activity)
-
-tree = app_commands.CommandTree(client)
+bot = commands.Bot(command_prefix="!", intents=intents, activity=activity)
 
 url = "https://api-free.deepl.com/v2/translate"
 translator = deepl.Translator(dcs.deepl_auth)  # dcs.deepl_auth is you DeepL API token
@@ -25,21 +23,21 @@ translator = deepl.Translator(dcs.deepl_auth)  # dcs.deepl_auth is you DeepL API
 val_langs = ["BG", "CS", "DA", "DE", "EL", "EN-US", "EN-GB", "ES", "ET", "FI", "FR", "HU", "ID", "IT", "JA", "KO", "LT", "LV", "NB", "NL", "PL", "PT-BR", "PT-PT", "RO", "RU", "SL", "SV", "TR", "UK", "ZH"]
 
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f'We have logged in as {client.user}')
+    print(f'We have logged in as {bot.user}')
 
 
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
 
     if message.content.startswith("!sync"):
         print("syncing")
-        await tree.sync(guild=discord.Object(id=889711909379641375))
+        await bot.tree.sync(guild=discord.Object(id=889711909379641375))
         print("syncing...")
-        await tree.sync()
+        await bot.tree.sync()
         print("done")
         return
 
@@ -76,7 +74,7 @@ async def on_message(message):
 # TODO: figure out how to use app_commands.translate and related functions to translate descriptions and add renames for the values
 
 
-@tree.command(name="translate", description="Translate some text")
+@bot.tree.command(name="translate", description="Translate some text")
 @app_commands.describe(message="Message to translate")
 @app_commands.describe(language="Language to translate to (default is english)")
 async def Translator(interaction: discord.Interaction, message: str, language: str = None):
@@ -100,7 +98,7 @@ async def Translator(interaction: discord.Interaction, message: str, language: s
     return
 
 
-@tree.command(name="help", description="Display a help message in your langauage")
+@bot.tree.command(name="help", description="Display a help message in your langauage")
 @app_commands.describe(help="Which help message to display.")
 @app_commands.describe(language="Displays the help message in this language (Default is \"English (United States)\")")
 async def Help(interaction: discord.Interaction, help: str = "languages", language: str = "en-us"):
@@ -131,4 +129,4 @@ if __name__ == "__main__":
             result = translator.translate_text(text, target_lang=lang)
             print(result)
     else:
-        client.run(dcs.bot_token)
+        bot.run(dcs.bot_token)
