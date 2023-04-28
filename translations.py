@@ -37,10 +37,10 @@ def use_translate(lang, key):
     else: 
         trans = en.get(key, key)
     return trans
-
-async def try_translate(*, message):
-    print(message)
-    return message
+# This is for testing purposed and is not to be used at all
+# async def try_translate(*, message):
+#    print(message)
+#    return message
 
 if __name__ == "__main__":
     print("why")
