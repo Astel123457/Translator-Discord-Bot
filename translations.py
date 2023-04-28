@@ -13,15 +13,15 @@ ja = {
     "message.warning" : "メッセージをご記入ください",
     "message.somethingwrong" : "すみません、何か変でした。もう一度お試しください。",
     "help.warning" : "/helpに有効なコマンドを指定してください!", 
-    "help.supported" : "Here is a list of languages that I currently support: "
+    "help.supported" : "現在、私がサポートしている言語の一覧です: "
 }
-fr {
-    "translation.warning" : "Please use /translate for better compatibility.",
+fr = {
+    "translation.warning" : "S'il vous plaît utilisez /translate pour une meilleure compatibilité",
     "translation.source": "Source: ",
-    "message.warning" : "Please provide a message.",
-    "message.somethingwrong" : "Sorry, something went wrong. Please try again.",
-    "help.warning" : "Please specify a valid command for /help!",
-    "help.supported" : "Here is a list of languages that I currently support: "
+    "message.warning" : "S'il vous plaît fournissez un message",
+    "message.somethingwrong" : "Désolé, quelque chose n'a pas marché, veuillez réessayer",
+    "help.warning" : "S'il vous plaît spécifiez une commande valide pour /help!",
+    "help.supported" : "Voici la liste des langues que je supporte pour le moment: "
 }
 
 def use_translate(lang, key):
@@ -29,7 +29,6 @@ def use_translate(lang, key):
     trans = ""
     if lang == "EN":
         trans = en.get(key, key)
-    
     elif lang == "JA":
         trans = ja.get(key, key)
     elif lang == "FR":
