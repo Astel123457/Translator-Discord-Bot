@@ -1,0 +1,4 @@
+discord
+deepl
+langcodes
+language_data
