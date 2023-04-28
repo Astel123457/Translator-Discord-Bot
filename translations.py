@@ -13,7 +13,7 @@ ja = {
     "message.somethingwrong" : "すみません、何か変でした。もう一度お試しください。",
     "help.warning" : "/helpに有効なコマンドを指定してください!"
 }
-en = {
+fr {
     "translation.warning" : "Please use /translate for better compatibiliy.",
     "translation.source": "Source: ",
     "message.warning" : "Please provide a message.",
@@ -30,7 +30,7 @@ def use_translate(lang, key):
     elif lang == "JA":
         trans = ja.get(key, key)
     elif lang == "FR":
-        trans = ja.get(key, key)
+        trans = fr.get(key, key)
     # If it's not a language that's supported, default to EN translations
     else: 
         trans = en.get(key, key)
