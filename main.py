@@ -165,24 +165,24 @@ if __name__ == "__main__":
     if args.no_bot:
         returnjson = args.json
         lang = args.lang[0]
+
         # consider that user may have typed a name of a language instead of a code
         # parse to a code by langcodes.find()
-        code = None
         try:
             code = langcodes.find(lang).language  # find language by english name, get code from .language
         except langcodes.LanguageTagError:  # invalid tag
             if not returnjson:
                 print("Could not parse language tag.")
             code = "en-us"
-        except LookupError:
+        except LookupError:  # language not found
             if not returnjson:
                 print(f"Could not find language \"{lang}\".")
             code = "en-us"
 
-        if code == "en":  # dumb check
+        if code == "en":  # dumb fix
             code = "en-us"
 
-        if code.upper() not in val_langs:
+        if code.upper() not in val_langs:  # not supported by deepL
             if not returnjson:
                 print("Sorry, DeepL doesn't support that language.")
             code = "en-us"
@@ -199,15 +199,16 @@ if __name__ == "__main__":
             print("Message: " + message)
 
         result = translator.translate_text(message, target_lang=code)
+
         if returnjson:
             resultdict = {
                 "input": message,
                 "target": code,
-                "output": str(result)
+                "output": str(result)  # json doesn't like TextResult object
             }
             print(json.dumps(resultdict, indent=None))
         else:
             print(result)
 
-    else:
+    else:  # if not no_bot
         bot.run(dcs.bot_token)
