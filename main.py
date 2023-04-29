@@ -206,7 +206,7 @@ if __name__ == "__main__":
             resultdict = {
                 "input": message,
                 "target": code,
-                "output": str(result)  # json doesn't like TextResult object
+                "output": result.text
             }
             print(json.dumps(resultdict, indent=None))
         else:
