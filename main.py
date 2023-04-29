@@ -95,7 +95,7 @@ async def Translator(interaction: discord.Interaction, message: str, language: s
         get = res_lang.describe(language.lower())
         result_lang = get.get("language")
     except deepl.exceptions.DeepLException as e:
-        interaction.followup.send(content=e)
+        await interaction.followup.send(content=e)
     await interaction.followup.send(content=t.use_translate(language, "translation.source") + result_lang + "\n" + result.text)
     return
 
@@ -126,21 +126,23 @@ if __name__ == "__main__":
         action="store_true"
     )
 
-    # required lang; 1 argument only
-    parser.add_argument(
-        "lang",
-        nargs=1,
-        help="Language to translate to"
-    )
+    # Add optional arguments that are required if --no-bot is included
+    if "--no-bot" in sys.argv:
+        # required lang; 1 argument only
+        parser.add_argument(
+            "lang",
+            nargs=1,
+            help="Language to translate to"
+        )
 
-    # required message;
-    # can return list if typed directly into console, or string if typed in quotes
-    # value must be sanitized later
-    parser.add_argument(
-        "message",
-        nargs="+",
-        help="Message to translate"
-    )
+        # required message;
+        # can return list if typed directly into console, or string if typed in quotes
+        # value must be sanitized later
+        parser.add_argument(
+            "message",
+            nargs="+",
+            help="Message to translate"
+        )
 
     parser.add_argument(
         "--usage",
