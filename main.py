@@ -107,7 +107,7 @@ async def Help(interaction: discord.Interaction, help: str = "languages", langua
     await interaction.response.defer()
     if help == "languages":
         result = translator.get_target_languages()
-        langs = t.use_translate("help.supported", language) + "\n"
+        langs = t.use_translate(language, "help.supported") + "\n"
         for lang in result:
             res_lang = langcodes.get(lang.code)
             get = res_lang.describe(language.lower())
