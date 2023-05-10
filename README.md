@@ -70,7 +70,7 @@ German (DE)
 ```
 /help help:languages language:JA
 
-Here is a list of languages that I currently support:
+現在、私がサポートしている言語の一覧です:
 ブルガリア語 (BG)
 チェコ語 (CS)
 デンマーク語 (DA)
