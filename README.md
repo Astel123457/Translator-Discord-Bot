@@ -53,18 +53,28 @@ Ahora son las 6 en punto.
 
 ### **/help [languages]**
 
-Displays a help message for various topics. If a language code is specified, the help message will be displayed in that language.
+Displays a help message for various topics. If a language code is specified, the help message will be displayed in that language. By default, the message is in English
 
 ### Example
 
 ```
-/help help:languages language:EN
+/help help:languages
 
 Here is a list of languages that I currently support:
 Bulgarian (BG)
 Czech (CS)
 Danish (DA)
 German (DE)
+...
+```
+```
+/help help:languages language:JA
+
+Here is a list of languages that I currently support:
+ブルガリア語 (BG)
+チェコ語 (CS)
+デンマーク語 (DA)
+ドイツ語 (DE)
 ...
 ```
 
