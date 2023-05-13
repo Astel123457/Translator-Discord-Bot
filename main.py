@@ -9,6 +9,10 @@ import langcodes
 import argparse
 import json
 
+from langdetect import detect, DetectorFactory, LangDetectException
+# set seed to 0 to make langdetect deterministic
+DetectorFactory.seed = 0
+
 # TODO: use langcodes for plaintext language to code conversion (eg "english" -> "en")
 # TODO: add translations for some pre-defined messages, like the slash command mention on line 40
 
@@ -78,25 +82,64 @@ async def on_message(message):
 
 @bot.tree.command(name="translate", description="Translate some text")
 @app_commands.describe(message="Message to translate")
-@app_commands.describe(language="Language to translate to (default is english)")
-async def Translator(interaction: discord.Interaction, message: str, language: str = None):
-    await interaction.response.defer()  # fix 404 no webhook bc apperently it takes over 3 seconds to respond (it doesn't it only takes like 500 ms)
-    if language is None:
-        language = "EN-US"
-    language = language.upper()
-    if message is None:
-        await interaction.followup.send(content=t.use_translate(lang=language.upper(), key="message.warning"))
-        return
-    if language == "EN":
-        language == "EN-US"
-    try:  # This is mostly to fix limit/bad language errors, so we just show it to the user i'll figure out a way to make it better later
-        result = translator.translate_text(message, target_lang=language)
-        res_lang = langcodes.get(result.detected_source_lang)
-        get = res_lang.describe(language.lower())
-        result_lang = get.get("language")
+@app_commands.describe(target_lang="Language to translate to (default is english)")
+@app_commands.rename(target_lang="language")
+@app_commands.describe(source_lang="Force DeepL to translate as this language")
+@app_commands.rename(source_lang="source-language")
+async def Translator(interaction: discord.Interaction, message: str, target_lang: str = None, source_lang: str = None):
+    await interaction.response.defer()  # defer in case response takes a while
+
+    if target_lang is None:  # default translate to english
+        target_lang = "EN-US"
+
+    target_lang = target_lang.upper()
+
+    if target_lang == "EN":  # deepl needs en-us or en-gb
+        target_lang == "EN-US"
+
+    try:
+        has_cjk = detect_cjk(message)  # maybe message has cjk?
+
+        if has_cjk and len(message) < 4 and source_lang is None:  # only use on short messages, only if source lang is not forced
+            await interaction.followup.send(content=t.use_translate(target_lang, "translation.cjk_ambiguous"))  # notify of cjk behavior
+            # convert as if message is C, J, and K
+            _cjk = ["zh", "ja", "ko"]
+
+            _response = ""
+            for cjk_source in _cjk:
+                _response += t.use_translate("en", "translation.source") \
+                    + langcodes.get(cjk_source) \
+                    .describe(target_lang) \
+                    .get("language") \
+                    + "\n"
+
+                _translated = translator.translate_text(
+                    message,
+                    source_lang=cjk_source,
+                    target_lang=target_lang
+                )
+
+                _response += _translated.text
+                _response += "\n"
+
+            await interaction.followup.send(content=_response)
+        else:
+            if source_lang is not None:  # forcing source lang
+                result = translator.translate_text(message, source_lang=source_lang, target_lang=target_lang)
+            else:
+                result = translator.translate_text(message, target_lang=target_lang)
+
+            source_lang_obj = langcodes.get(result.detected_source_lang)
+            source_lang_desc = source_lang_obj.describe(target_lang.lower())
+            result_source_lang_name = source_lang_desc.get("language")
+
+            final_response = t.use_translate(target_lang, "translation.source")
+            final_response += result_source_lang_name
+            final_response += "\n"
+            final_response += result.text
+            await interaction.followup.send(content=final_response)
     except deepl.exceptions.DeepLException as e:
         await interaction.followup.send(content=e)
-    await interaction.followup.send(content=t.use_translate(language, "translation.source") + result_lang + "\n" + result.text)
     return
 
 
@@ -116,6 +159,31 @@ async def Help(interaction: discord.Interaction, help: str = "languages", langua
         await interaction.followup.send(content=langs)
     else:
         await interaction.followup.send(content=t.use_translate(language, "help.warning"))
+
+
+def detect_cjk(_text: str):
+    """
+    Use the langdetect library to possibly detect CJK in a string.
+    Meant to fix the ambiguous issue where DeepL detects single
+    kanji/hanzi as English.
+
+    langdetect is not error-free either; some characters are
+    detected as Korean.
+
+    Parameters:
+        _text: The text to detect CJK in.
+
+    Returns:
+        A boolean value indicating whether CJK may be detected.
+    """
+    _cjk = ["ko", "zh-cn", "zh-tw", "ja", "zh"]
+    try:
+        lang = detect(_text)
+        if lang in _cjk:
+            return True
+        return False
+    except LangDetectException:
+        return False
 
 
 if __name__ == "__main__":
