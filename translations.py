@@ -2,6 +2,7 @@
 en = {
     "translation.warning" : "Please use /translate for better compatibility.",
     "translation.source": "Source: ",
+    "translation.cjk_ambiguous": "This message may contain Chinese, Japanese, or Korean. Translating as all three for better accuracy.",
     "message.warning" : "Please provide a message.",
     "message.somethingwrong" : "Sorry, something went wrong. Please try again.",
     "help.warning" : "Please specify a valid command for /help!", 
