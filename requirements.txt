@@ -1,4 +1,6 @@
 discord
 deepl
+jisho-api
 langcodes
+langdetect
 language_data
