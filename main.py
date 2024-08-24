@@ -86,6 +86,7 @@ async def on_message(message):
 @app_commands.rename(target_lang="language")
 @app_commands.describe(source_lang="Force DeepL to translate as this language")
 @app_commands.rename(source_lang="source-language")
+@app_commands.allowed_installs(guilds=True, users=True)
 async def Translator(interaction: discord.Interaction, message: str, target_lang: str = None, source_lang: str = None):
     await interaction.response.defer()  # defer in case response takes a while
 
@@ -146,6 +147,7 @@ async def Translator(interaction: discord.Interaction, message: str, target_lang
 @bot.tree.command(name="help", description="Display a help message in your langauage")
 @app_commands.describe(help="Which help message to display.")
 @app_commands.describe(language="Displays the help message in this language (Default is \"English (United States)\")")
+@app_commands.allowed_installs(guilds=True, users=True)
 async def Help(interaction: discord.Interaction, help: str = "languages", language: str = "en-us"):
     await interaction.response.defer()
     if help == "languages":
